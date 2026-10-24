@@ -5,10 +5,9 @@
 A Crusader Kings III mod that makes the Head of Faith the guardian of the faith at Ecumenical Councils called by the AI. In vanilla, the Head of Faith is just one more vote: an AI archbishop can call a council, gather a majority and change the faith's tenets and doctrines without the Pope's consent. With this mod, an AI council needs the Head of Faith present, and an AI Head of Faith always opposes and vetoes the changes. Councils you call, or that the Head of Faith calls, work as in vanilla.
 
 - **Game version:** 1.20.x
-- **Mod version:** 1.0.0
+- **Mod version:** 1.1.0
 - **Author:** [Sourenics](https://github.com/Sourenics)
-- **Steam Workshop:** [Head of Faith Council Veto
-](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064881)
+- **Steam Workshop:** [Head of Faith Council Veto](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064881)
 
 ## Features
 
@@ -25,6 +24,10 @@ At an **Ecumenical Council hosted by an AI** who is not the Head of Faith:
 - **Faiths without a Head of Faith:** unchanged.
 
 With an AI Head of Faith, a council called by another AI will never change the faith. AI rulers still call councils and pay for them as usual.
+
+### When the mod applies
+
+By default, the mod applies **after the Great Schism**: from the start in games that begin after it, such as the 1066 and 1178 bookmarks, and from the moment it happens in an 867 game. Before the Schism, and for the whole game if the Schism is prevented, Ecumenical Councils work as in vanilla. The game rule **HFCV: Head of Faith Council Veto** can be set to **Always** to apply the mod for the whole game.
 
 ### Languages
 

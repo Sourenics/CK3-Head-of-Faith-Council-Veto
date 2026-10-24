@@ -2,3 +2,8 @@
  hfcv_council_cancelled_toast:0 "Concilio ecuménico cancelado"
  hfcv_council_cancelled_toast_desc:0 "[hfcv_head_of_faith.GetTitledFirstName], [head_of_faith|E], no asiste al [ecumenical_council|E], así que no puede celebrarse."
  hfcv_ecumenical_council_vetoed_desc:0 "\n\n#N [hfcv_vetoing_head.GetTitledFirstName] ha vetado la propuesta:#! sin el consentimiento del [head_of_faith|E], ninguna mayoría puede cambiar la [faith|E]."
+ rule_hfcv_activation:0 "#color_green HFCV:#! Veto del Jefe de Fe en los concilios"
+ setting_hfcv_active_after_schism:0 "Tras el Gran Cisma"
+ setting_hfcv_active_after_schism_desc:0 "El mod se aplica una vez se ha producido el Gran Cisma: desde el inicio en las partidas que empiezan después, como los marcadores de 1066 y 1178, y desde el momento en que se produce en las partidas anteriores. Antes del Cisma, y si se evita, los concilios ecuménicos funcionan como en el juego base."
+ setting_hfcv_active_always:0 "Siempre"
+ setting_hfcv_active_always_desc:0 "El mod se aplica durante toda la partida, también antes del Gran Cisma."

@@ -2,8 +2,22 @@
 # of an Ecumenical Council. The mod only applies to councils an AI hosts, and never when the Head of
 # Faith is the host: councils of a player (or of a player's theological puppet) stay vanilla.
 
-# Any scope. The council's host is an AI who is not a player's theological puppet.
+# Any scope. The mod is active: always, or by default only once the Great Schism has happened
+# (from the start in games that begin after it). It stays inactive if the Schism was prevented.
+hfcv_mod_active_trigger = {
+	OR = {
+		has_game_rule = hfcv_active_always
+		AND = {
+			has_global_variable = pam_great_schism_decision_taken
+			NOT = { has_global_variable = pam_great_schism_prevented }
+		}
+	}
+}
+
+# Any scope. The mod is active and the council's host is an AI who is not a player's theological puppet.
+# Every change of the mod depends on this trigger.
 hfcv_council_is_ai_hosted_trigger = {
+	hfcv_mod_active_trigger = yes
 	scope:host = {
 		is_ai = yes
 		NOT = { puppeteer ?= { is_ai = no } }

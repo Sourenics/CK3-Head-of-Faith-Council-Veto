@@ -1,0 +1,11 @@
+﻿# Head of Faith Council Veto - game rules.
+# When the mod applies: only after the Great Schism (default), or for the whole game.
+hfcv_activation = {
+	categories = { flavor }
+
+	default = hfcv_active_after_schism
+
+	hfcv_active_after_schism = {}
+
+	hfcv_active_always = {}
+}

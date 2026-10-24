@@ -2,3 +2,8 @@
  hfcv_council_cancelled_toast:0 "Ecumenical Council Cancelled"
  hfcv_council_cancelled_toast_desc:0 "[hfcv_head_of_faith.GetTitledFirstName], the [head_of_faith|E], is not attending the [ecumenical_council|E], so it cannot go ahead."
  hfcv_ecumenical_council_vetoed_desc:0 "\n\n#N [hfcv_vetoing_head.GetTitledFirstName] vetoed the proposal:#! without the consent of the [head_of_faith|E], no majority can change the [faith|E]."
+ rule_hfcv_activation:0 "#color_green HFCV:#! Head of Faith Council Veto"
+ setting_hfcv_active_after_schism:0 "After the Great Schism"
+ setting_hfcv_active_after_schism_desc:0 "The mod applies once the Great Schism has happened: from the start in games that begin after it, such as the 1066 and 1178 bookmarks, and from the moment it happens in earlier games. Before the Schism, and if it is prevented, Ecumenical Councils work as in vanilla."
+ setting_hfcv_active_always:0 "Always"
+ setting_hfcv_active_always_desc:0 "The mod applies for the whole game, also before the Great Schism."
