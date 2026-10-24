@@ -1,0 +1,4 @@
+﻿l_korean:
+ hfcv_council_cancelled_toast:0 "Ecumenical Council Cancelled"
+ hfcv_council_cancelled_toast_desc:0 "[hfcv_head_of_faith.GetTitledFirstName], the [head_of_faith|E], is not attending the [ecumenical_council|E], so it cannot go ahead."
+ hfcv_ecumenical_council_vetoed_desc:0 "\n\n#N [hfcv_vetoing_head.GetTitledFirstName] vetoed the proposal:#! without the consent of the [head_of_faith|E], no majority can change the [faith|E]."

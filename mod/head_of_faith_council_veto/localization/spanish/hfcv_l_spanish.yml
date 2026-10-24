@@ -1,0 +1,4 @@
+﻿l_spanish:
+ hfcv_council_cancelled_toast:0 "Concilio ecuménico cancelado"
+ hfcv_council_cancelled_toast_desc:0 "[hfcv_head_of_faith.GetTitledFirstName], [head_of_faith|E], no asiste al [ecumenical_council|E], así que no puede celebrarse."
+ hfcv_ecumenical_council_vetoed_desc:0 "\n\n#N [hfcv_vetoing_head.GetTitledFirstName] ha vetado la propuesta:#! sin el consentimiento del [head_of_faith|E], ninguna mayoría puede cambiar la [faith|E]."

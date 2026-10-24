@@ -1,0 +1,29 @@
+﻿# Head of Faith Council Veto - scripted effects.
+
+# Host scope, from the council's on_start (scope:activity is the council). At a council an AI hosts,
+# an AI Head of Faith who can join is added to it; one who cannot will get it cancelled when it begins.
+hfcv_summon_head_of_faith_effect = {
+	if = {
+		limit = { hfcv_council_is_ai_hosted_trigger = yes }
+		faith.religious_head ?= {
+			if = {
+				limit = {
+					is_ai = yes
+					this != scope:host
+					NOT = { is_participant_in_activity = scope:activity }
+					can_join_activity = scope:activity
+				}
+				add_to_activity = scope:activity
+				debug_log = "Head of Faith Council Veto: the AI Head of Faith was added to an AI Ecumenical Council"
+			}
+			else_if = {
+				limit = {
+					is_ai = yes
+					this != scope:host
+					NOT = { is_participant_in_activity = scope:activity }
+				}
+				debug_log = "Head of Faith Council Veto: the AI Head of Faith cannot join an AI Ecumenical Council"
+			}
+		}
+	}
+}

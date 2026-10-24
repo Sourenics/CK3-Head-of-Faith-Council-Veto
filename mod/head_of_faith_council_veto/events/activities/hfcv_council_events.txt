@@ -1,0 +1,51 @@
+﻿namespace = hfcv_council
+
+# Head of Faith Council Veto - cancels an AI-hosted Ecumenical Council whose Head of Faith never
+# joined it. Root is the host, still involved in the council (flagged by the summons check).
+hfcv_council.0001 = {
+	type = character_event
+	hidden = yes
+
+	trigger = {
+		has_variable = hfcv_council_to_cancel
+	}
+
+	immediate = {
+		remove_variable = hfcv_council_to_cancel
+		save_scope_as = host
+		involved_activity ?= { save_scope_as = activity }
+		if = {
+			limit = {
+				exists = scope:activity
+				scope:activity = { has_activity_type = activity_ecumenical_council }
+				hfcv_council_is_ai_hosted_trigger = yes
+				hfcv_head_of_faith_never_joined_trigger = yes
+			}
+			faith.religious_head = { save_scope_as = hfcv_head_of_faith }
+			debug_log = "Head of Faith Council Veto: Ecumenical Council cancelled because the Head of Faith never joined it"
+			scope:activity = {
+				every_attending_character = {
+					limit = { is_ai = no }
+					send_interface_toast = {
+						type = event_toast_effect_neutral
+						title = hfcv_council_cancelled_toast
+						desc = hfcv_council_cancelled_toast_desc
+						left_icon = scope:hfcv_head_of_faith
+					}
+				}
+			}
+			scope:hfcv_head_of_faith = {
+				if = {
+					limit = { is_ai = no }
+					send_interface_toast = {
+						type = event_toast_effect_neutral
+						title = hfcv_council_cancelled_toast
+						desc = hfcv_council_cancelled_toast_desc
+						left_icon = scope:hfcv_head_of_faith
+					}
+				}
+			}
+			invalidate_activity = scope:activity
+		}
+	}
+}

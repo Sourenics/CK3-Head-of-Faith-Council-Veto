@@ -1,0 +1,58 @@
+﻿# Head of Faith Council Veto - scripted triggers. All of them need scope:host and scope:activity
+# of an Ecumenical Council. The mod only applies to councils an AI hosts, and never when the Head of
+# Faith is the host: councils of a player (or of a player's theological puppet) stay vanilla.
+
+# Any scope. The council's host is an AI who is not a player's theological puppet.
+hfcv_council_is_ai_hosted_trigger = {
+	scope:host = {
+		is_ai = yes
+		NOT = { puppeteer ?= { is_ai = no } }
+	}
+}
+
+# Character scope. The AI Head of Faith of the host's faith, at a council an AI hosts: always opposes.
+hfcv_is_opposing_head_of_faith_trigger = {
+	is_ai = yes
+	hfcv_council_is_ai_hosted_trigger = yes
+	this != scope:host
+	scope:host.faith.religious_head ?= this
+}
+
+# Any scope. The faith has a Head of Faith who is not the host, and they never joined the council
+# (a Head of Faith still travelling to it has joined). Used to cancel the council when it begins.
+hfcv_head_of_faith_never_joined_trigger = {
+	scope:host.faith.religious_head ?= {
+		this != scope:host
+		NOT = { is_participant_in_activity = scope:activity }
+	}
+}
+
+# Any scope. The faith has a Head of Faith who is not the host, and they are not attending.
+hfcv_council_lacks_head_of_faith_trigger = {
+	scope:host.faith.religious_head ?= {
+		this != scope:host
+		save_temporary_scope_as = hfcv_head_of_faith
+	}
+	exists = scope:hfcv_head_of_faith
+	scope:activity = {
+		NOT = {
+			any_attending_character = { this = scope:hfcv_head_of_faith }
+		}
+	}
+}
+
+# Any scope. The Head of Faith vetoes the proposal: an AI Head of Faith always does, a player
+# Head of Faith does when they oppose it, and an absent Head of Faith cannot approve anything.
+hfcv_head_of_faith_vetoes_trigger = {
+	hfcv_council_is_ai_hosted_trigger = yes
+	OR = {
+		hfcv_council_lacks_head_of_faith_trigger = yes
+		scope:host.faith.religious_head ?= {
+			this != scope:host
+			OR = {
+				is_ai = yes
+				is_in_guest_subset = { name = conservative }
+			}
+		}
+	}
+}

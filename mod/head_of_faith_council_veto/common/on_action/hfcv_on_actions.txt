@@ -1,0 +1,31 @@
+﻿# Head of Faith Council Veto - on_actions. Vanilla on_actions are only extended through
+# on_actions lists, so no vanilla effect block is overridden.
+
+# Weekly pulse of the Summons phase, fired for each attendee
+ecumenical_council_summons_events = {
+	on_actions = { hfcv_ecumenical_council_summons_check }
+}
+
+# Root is the host. A council an AI hosts is cancelled when it begins if its Head of Faith never
+# joined it. The cancellation runs a day later in hfcv_council.0001, so the other attendees' pulse
+# events of this same week do not fire on a council that no longer exists.
+hfcv_ecumenical_council_summons_check = {
+	trigger = {
+		exists = scope:activity
+		exists = scope:host
+		this = scope:host
+		NOT = { has_variable = hfcv_council_to_cancel }
+		hfcv_council_is_ai_hosted_trigger = yes
+		hfcv_head_of_faith_never_joined_trigger = yes
+	}
+	effect = {
+		set_variable = {
+			name = hfcv_council_to_cancel
+			days = 30
+		}
+		trigger_event = {
+			id = hfcv_council.0001
+			days = 1
+		}
+	}
+}

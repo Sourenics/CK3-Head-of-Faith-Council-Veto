@@ -1,0 +1,477 @@
+﻿# Head of Faith Council Veto - single-object overrides of vanilla scripted effects from
+# common/scripted_effects/pam_ecumenical_council_effects.txt (game 1.20.1.2).
+# Each effect is a vanilla copy; changes are marked HEAD OF FAITH COUNCIL VETO.
+
+pam_ecumenical_council_host_start_catalyst_effect = {
+	if = {
+		limit = {
+			OR = {
+				any_character_situation = {
+					situation_type = the_christian_church
+					situation_top_has_catalyst = catalyst_hosted_ecumenical_council
+				}
+				puppeteer ?= {
+					any_character_situation = {
+						situation_type = the_christian_church
+						situation_top_has_catalyst = catalyst_hosted_ecumenical_council
+					}
+				}
+			}
+		}
+		situation:the_christian_church = {
+			trigger_situation_catalyst = {
+				catalyst = catalyst_hosted_ecumenical_council
+				character = scope:host
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOR = {
+				any_held_title = { is_head_of_faith = yes }
+				government_has_flag = government_is_ecclesiastical
+			}
+			OR = {
+				any_character_situation = {
+					situation_type = the_christian_church
+					situation_top_has_catalyst = catalyst_secular_hosted_ecumenical_council
+				}
+				puppeteer ?= {
+					any_character_situation = {
+						situation_type = the_christian_church
+						situation_top_has_catalyst = catalyst_secular_hosted_ecumenical_council
+					}
+				}
+			}
+		}
+		situation:the_christian_church = {
+			trigger_situation_catalyst = {
+				catalyst = catalyst_secular_hosted_ecumenical_council
+				character = scope:host
+			}
+		}
+	}
+	# HEAD OF FAITH COUNCIL VETO: the AI Head of Faith always attends
+	hfcv_summon_head_of_faith_effect = yes
+}
+
+ecumenical_council_become_innovator_effect = {
+	# HEAD OF FAITH COUNCIL VETO: an AI Head of Faith who is not the host cannot be swayed to support
+	if = {
+		limit = {
+			$CHARACTER$ = { hfcv_is_opposing_head_of_faith_trigger = no }
+		}
+		scope:activity.var:current_topic ?= { save_scope_as = ec_current_topic }
+		$CHARACTER$ = {
+			save_scope_as = ec_switch_stance
+			if = {
+				limit = {
+					scope:activity = {
+						is_target_in_variable_list = {
+							name = major_conservative
+							target = $CHARACTER$
+						}
+					}
+				}
+				scope:activity = {
+					remove_list_variable = {
+						name = major_conservative
+						target = $CHARACTER$
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_in_guest_subset = {
+						name = conservative
+					}
+				}
+				custom_tooltip = ec_conservative_becomes_innovator_tt
+			}
+			else = {
+				custom_tooltip = ec_becomes_innovator_tt
+			}
+			#Are you a conservative? Stop that
+			if = {
+				limit = {
+					is_in_guest_subset = {
+						name = conservative
+					}
+				}
+				scope:activity = {
+					remove_from_guest_subset = {
+						name = conservative
+						target = $CHARACTER$
+					}
+					add_to_variable_list = {
+						name = blocked_from_conservatives
+						target = $CHARACTER$
+					}
+					if = {
+						limit = {
+							has_variable_list = locked_into_conservatives
+						}
+						remove_list_variable = {
+							name = locked_into_conservatives
+							target = $CHARACTER$
+						}
+					}
+				}
+
+			}
+			#Not a innovator? Make them a innovator
+			if = {
+				limit = {
+					NOT = {
+						is_in_guest_subset = {
+							name = innovator
+						}
+					}
+				}
+				scope:activity = {
+					add_to_guest_subset = {
+						name = innovator
+						target = $CHARACTER$
+					}
+					add_to_variable_list = {
+						name = locked_into_innovators
+						target = $CHARACTER$
+					}
+					if = {
+						limit = {
+							has_variable_list = blocked_from_innovators
+						}
+						remove_list_variable = {
+							name = blocked_from_innovators
+							target = $CHARACTER$
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:activity = {
+							any_in_list = {
+								variable = major_innovator
+								count = all
+								ecumenical_council_innovator_sort_value > $CHARACTER$.ecumenical_council_innovator_sort_value
+							}
+						}
+					}
+				}
+				scope:activity = {
+					ordered_in_list = {
+						variable = major_innovator
+						order_by = {
+							value = ecumenical_council_innovator_sort_value
+							multiply = -1
+						}
+						scope:activity = {
+							remove_list_variable = {
+								name = major_innovator
+								target = prev
+							}
+						}
+					}
+					add_to_variable_list = {
+						name = major_innovator
+						target = $CHARACTER$
+					}
+				}
+			}
+		}
+	}
+}
+
+pam_sort_guests_into_ecumenical_council_groups_effect = {
+	scope:activity = {
+		# Clear all lists
+		clear_variable_list = major_innovator
+		clear_variable_list = major_conservative
+		clear_variable_list = locked_into_innovators
+		clear_variable_list = locked_into_conservatives
+		# Explain the backlash again for each debate that passes
+		remove_variable = ec_backlash_tt_shown
+		every_guest_subset = {
+		 	name = innovator
+			scope:activity = {
+			 	remove_from_guest_subset = {
+			 		name = innovator
+			 		target = prev
+			 	}
+			}
+		}
+		every_guest_subset = {
+		 	name = conservative
+			scope:activity = {
+			 	remove_from_guest_subset = {
+			 		name = conservative
+			 		target = prev
+			 	}
+		 	}
+		}
+		# The host always supports their own proposal, regardless of player or AI control
+		scope:host = {
+			add_to_list = innovator
+			scope:activity = {
+				add_to_guest_subset = {
+					name = innovator
+					target = prev
+				}
+			}
+		}
+		# Build a list of AI guest innovators
+		every_attending_character = {
+			limit = {
+				# Players will decide in the follow up event
+				is_ai = yes
+				this != scope:host
+				# Only eligible voters
+				pam_valid_ecumenical_council_voter_trigger = yes
+				NOT = {	has_relation_rival = scope:host }
+				# HEAD OF FAITH COUNCIL VETO: an AI Head of Faith who is not the host always opposes
+				hfcv_is_opposing_head_of_faith_trigger = no
+				trigger_if = {
+					limit = {
+						scope:activity = { has_current_phase = ecumenical_council_phase_first_debate }
+					}
+					scope:activity.activity_tenet:1 = {
+						save_temporary_scope_as = tenet
+					}
+					OR = {
+						scope:host = { has_strong_hook = prev }
+						ecumenical_council_attendee_support_value > 0
+					}
+				}
+				trigger_else_if = {
+					limit = {
+						scope:activity = { has_current_phase = ecumenical_council_phase_second_debate }
+					}
+					scope:activity.activity_tenet:2 = {
+						save_temporary_scope_as = tenet
+					}
+					OR = {
+						scope:host = { has_strong_hook = prev }
+						ecumenical_council_attendee_support_value > 0
+					}
+				}
+				trigger_else = {
+					scope:activity.var:third_debate_proposal ?= {
+						save_temporary_scope_as = doctrine
+					}
+					OR = {
+						scope:host = { has_strong_hook = prev }
+						ecumenical_council_doctrine_attendee_support_value > 0
+					}
+				}
+			}
+			add_to_list = innovator
+			scope:activity = {
+				add_to_guest_subset = {
+					name = innovator
+					target = prev
+				}
+			}
+		}
+		# Lump everyone else into the conservative group
+		every_attending_character = {
+			limit = {
+				# Players will decide in the follow up event
+				is_ai = yes
+				# Only eligible voters
+				this != scope:host
+				pam_valid_ecumenical_council_voter_trigger = yes
+				NOT = { is_in_list = innovator }
+			}
+			add_to_list = conservative
+			scope:activity = {
+				add_to_guest_subset = {
+					name = conservative
+					target = prev
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_in_list = {
+					list = innovator
+					count >= 3
+				}
+			}
+			ordered_in_list = {
+				list = innovator
+				max = 3
+				order_by = ecumenical_council_innovator_sort_value
+				scope:activity = {
+					add_to_variable_list = {
+						name = major_innovator
+						target = prev
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { list_size:conservative > list_size:innovator }
+				# populate the list otherwise we have no random event at all.
+				ordered_in_list = {
+					list = conservative
+					# HEAD OF FAITH COUNCIL VETO: the AI Head of Faith is never flipped to support
+					limit = {
+						is_ai = yes
+						hfcv_is_opposing_head_of_faith_trigger = no
+					}
+					max = { # a bit more to prevent all flipped
+						value = list_size:conservative
+						multiply = 0.1
+						max = 10
+						min = 1
+					}
+					order_by = {
+						if = {
+							limit = {
+								scope:activity = { has_current_phase = ecumenical_council_phase_first_debate }
+							}
+							scope:activity.activity_tenet:1 = {
+								save_temporary_scope_as = tenet
+							}
+							add = ecumenical_council_attendee_support_value
+						}
+						else_if = {
+							limit = {
+								scope:activity = { has_current_phase = ecumenical_council_phase_second_debate }
+							}
+							scope:activity.activity_tenet:2 = {
+								save_temporary_scope_as = tenet
+							}
+							add = ecumenical_council_attendee_support_value
+						}
+						else = {
+							if = {
+								limit = { exists = scope:activity.var:third_debate_proposal }
+								scope:activity.var:third_debate_proposal = {
+									save_temporary_scope_as = doctrine
+								}
+							}
+							add = ecumenical_council_doctrine_attendee_support_value
+						}
+					}
+					remove_from_list = conservative
+					add_to_list = innovator
+					scope:activity = {
+						remove_from_guest_subset = {
+							name = conservative
+							target = prev
+						}
+						add_to_guest_subset = {
+							name = innovator
+							target = prev
+						}
+					}
+				}
+			}
+			every_in_list = {
+				list = innovator
+				scope:activity = {
+					add_to_variable_list = {
+						name = major_innovator
+						target = prev
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_in_list = {
+					list = conservative
+					count >= 3
+				}
+			}
+			ordered_in_list = {
+				list = conservative
+				max = 3
+				order_by = ecumenical_council_conservative_sort_value
+				scope:activity = {
+					add_to_variable_list = {
+						name = major_conservative
+						target = prev
+					}
+				}
+			}
+		}
+		else = {
+			every_in_list = {
+				list = conservative
+				scope:activity = {
+					add_to_variable_list = {
+						name = major_conservative
+						target = prev
+					}
+				}
+			}
+		}
+		# One AI Conservative argues against the host in every debate: the AI Head of Faith if he opposes, else the top mainline-rite Conservative
+		remove_variable = ec_counterplayer
+		every_in_list = {
+			list = conservative
+			limit = { scope:host.faith.religious_head ?= this }
+			save_temporary_scope_as = ec_counterplayer_pick
+		}
+		if = {
+			limit = { NOT = { exists = scope:ec_counterplayer_pick } }
+			ordered_in_list = {
+				list = conservative
+				limit = { rite = scope:host.faith.main_rite }
+				order_by = ecumenical_council_counterplayer_sort_value
+				save_temporary_scope_as = ec_counterplayer_pick
+			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:ec_counterplayer_pick } }
+			ordered_in_list = {
+				list = conservative
+				order_by = ecumenical_council_counterplayer_sort_value
+				save_temporary_scope_as = ec_counterplayer_pick
+			}
+		}
+		if = {
+			limit = { exists = scope:ec_counterplayer_pick }
+			set_variable = {
+				name = ec_counterplayer
+				value = scope:ec_counterplayer_pick
+			}
+		}
+		# Log the sides each debate starts with, since the AI is sorted anew for every proposal
+		var:current_topic ?= { save_scope_as = ec_current_topic }
+		if = {
+			limit = { NOT = { exists = scope:actor } }
+			scope:host = { save_scope_as = actor }
+		}
+		add_activity_log_entry = {
+			key = ecumenical_council_lineup_log
+			score = 0
+			character = scope:host
+			location = scope:host.location
+			every_in_list = {
+				list = innovator
+				custom = game_concept_ec_innovators
+				ecumenical_council_sway_stance_tt_effect = { SIDE = support }
+			}
+			every_in_list = {
+				list = conservative
+				custom = game_concept_ec_conservatives
+				ecumenical_council_sway_stance_tt_effect = { SIDE = oppose }
+			}
+		}
+		# Send event for player guests to know what was proposed
+		every_attending_character = {
+			limit = {
+				is_ai = no
+				this != scope:host
+				pam_valid_ecumenical_council_voter_trigger = yes
+			}
+			trigger_event = ecumenical_council_events.$NEXT_EVENT$
+		}
+	}
+}
