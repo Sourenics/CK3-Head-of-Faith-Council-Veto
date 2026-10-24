@@ -7,8 +7,8 @@ A Crusader Kings III mod that makes the Head of Faith the guardian of the faith 
 - **Game version:** 1.20.x
 - **Mod version:** 1.0.0
 - **Author:** [Sourenics](https://github.com/Sourenics)
-- **Steam Workshop:** coming soon
-
+- **Steam Workshop:** [Head of Faith Council Veto
+](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064881)
 ## Features
 
 At an **Ecumenical Council hosted by an AI** who is not the Head of Faith:
