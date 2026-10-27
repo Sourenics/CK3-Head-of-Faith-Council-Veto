@@ -29,3 +29,24 @@ hfcv_ecumenical_council_summons_check = {
 		}
 	}
 }
+
+# Incompatible mods. Marks the mod as loaded at game start and every year, for a little less than a
+# year so the mark disappears soon after the mod is removed. Protected Rites (1.1.0 or later), which
+# overrides the same vote tally event, reads it and tells the players once per game.
+on_game_start_after_lobby = {
+	on_actions = { hfcv_mark_mod_loaded }
+}
+
+yearly_global_pulse = {
+	on_actions = { hfcv_mark_mod_loaded }
+}
+
+hfcv_mark_mod_loaded = {
+	effect = {
+		set_global_variable = {
+			name = hfcv_mod_loaded
+			value = yes
+			days = 360
+		}
+	}
+}
