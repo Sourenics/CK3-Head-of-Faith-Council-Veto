@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- Fixed a vanilla bug in this mod's copy of `ecumenical_council_become_innovator_effect`, which also undid the Unofficial Patch fix for it when both mods were loaded: with the option "Let the light win over the assembly." of the Ecumenical Council event "In the Light", the up to three Conservatives it promises could fail to join the Innovators, because the change was applied to the council instead of to each of them. The mod now includes the Unofficial Patch fix, whether or not the Unofficial Patch is loaded. Nothing else changes.
+
 ## 1.1.1
 
 - Not compatible with Protected Rites 1.1.0 or later, which overrides the same vote tally event. The game now tells you once per game if both mods are loaded.

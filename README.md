@@ -5,7 +5,7 @@
 A Crusader Kings III mod that makes the Head of Faith the guardian of the faith at Ecumenical Councils called by the AI. In vanilla, the Head of Faith is just one more vote: an AI archbishop can call a council, gather a majority and change the faith's tenets and doctrines without the Pope's consent. With this mod, an AI council needs the Head of Faith present, and an AI Head of Faith always opposes and vetoes the changes. Councils you call, or that the Head of Faith calls, work as in vanilla.
 
 - **Game version:** 1.20.x
-- **Mod version:** 1.1.1
+- **Mod version:** 1.1.2
 - **Author:** [Sourenics](https://github.com/Sourenics)
 - **Steam Workshop:** [Head of Faith Council Veto](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064881)
 
@@ -56,7 +56,7 @@ Subscribe on the Steam Workshop page and enable the mod in the Paradox launcher.
 
 - Requires **By God Alone**, which adds the Ecumenical Council.
 - Overrides three vanilla scripted effects from `pam_ecumenical_council_effects.txt` in its own file (`pam_ecumenical_council_host_start_catalyst_effect`, `ecumenical_council_become_innovator_effect` and `pam_sort_guests_into_ecumenical_council_groups_effect`), and the vote tally event `ecumenical_council_events.0080` through `id_override_priority`. Each is a copy of the vanilla script with small, marked changes. Other mods that change the same effects or event are not compatible without a patch. It also adds to the `ecumenical_council_summons_events`, `on_game_start_after_lobby` and `yearly_global_pulse` on_actions without overriding them.
-- Compatible with the Unofficial Patch, which only changes an unrelated line of the council.
+- Compatible with the Unofficial Patch. Its fix to `ecumenical_council_become_innovator_effect` is included in this mod's copy of the effect, so it still applies when both are loaded.
 - Can be added to an existing save; best added when no council is in progress, since a council called before it was enabled did not summon the Head of Faith. Can be removed at any time.
 
 ## Reporting bugs
